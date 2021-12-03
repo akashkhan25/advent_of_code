@@ -15,7 +15,7 @@ defmodule AOC.Year2021.Day3 do
   def power_consumption(input) do
     input
     |> find_frequencies()
-    |> Enum.map(&find_rates/1)
+    |> Stream.map(&find_rates/1)
     |> Enum.reduce({"", ""}, fn {a, b}, {gam, eps} -> {gam <> a, eps <> b} end)
   end
 
@@ -27,9 +27,9 @@ defmodule AOC.Year2021.Day3 do
 
   def find_frequencies(input) do
     input
-    |> Stream.zip
+    |> Stream.zip()
     |> Stream.map(&Tuple.to_list/1)
-    |> Enum.map(&Enum.frequencies/1)
+    |> Stream.map(&Enum.frequencies/1)
   end
 
   defp calc_ans(val) do
@@ -39,30 +39,32 @@ defmodule AOC.Year2021.Day3 do
   end
 
   defp find_rates(val) do
-    {find_larger(val), find_smaller(val)}
+    {find_mode(val, :greater), find_mode(val, :lesser)}
   end
 
-  defp find_larger(%{"0" => v1, "1" => v2}) do
+  def find_mode(%{"0" => v1, "1" => v2}, :greater) do
     if v1 > v2, do: "0", else: "1"
   end
 
-  defp find_larger(%{"0" => _val}), do: "0"
-  defp find_larger(%{"1" => _val}), do: "1"
-
-  defp find_smaller(%{"0" => v1, "1" => v2}) do
+  def find_mode(%{"0" => v1, "1" => v2}, :lesser) do
     if v1 > v2, do: "1", else: "0"
   end
 
-  defp find_smaller(%{"0" => _val}), do: "0"
-  defp find_smaller(%{"1" => _val}), do: "1"
+  def find_mode(%{} = map, _mode) do
+    map
+    |> Map.keys()
+    |> hd
+  end
 
   def calc_oxy([_], val, _index), do: val
 
   def calc_oxy(input, val, index) do
-    check_val = input 
-    |> find_frequencies() 
-    |> Enum.at(index)
-    |> find_larger()
+    check_val =
+      input
+      |> find_frequencies()
+      |> Enum.at(index)
+      |> find_mode(:greater)
+
     new_input = input |> Enum.filter(&(Enum.at(&1, index) == check_val))
     calc_oxy(new_input, val <> check_val, index + 1)
   end
@@ -70,12 +72,11 @@ defmodule AOC.Year2021.Day3 do
   def calc_co2([val], _index), do: Enum.join(val)
 
   def calc_co2(input, index) do
-
     check_val =
       input
       |> find_frequencies()
       |> Enum.at(index)
-      |> find_smaller()
+      |> find_mode(:lesser)
 
     new_input = input |> Enum.filter(&(Enum.at(&1, index) == check_val))
     calc_co2(new_input, index + 1)
