@@ -13,7 +13,7 @@ defmodule AOC.Year2021.Day1 do
   def part2(list, count \\ 0)
 
   def part2([a, b, c, d | tail] = _list, count) do
-    count = if a < d, do: count + 1, else: count
+    count = if a + b + c < b + c + d, do: count + 1, else: count
     part2([b, c, d | tail], count)
   end
 

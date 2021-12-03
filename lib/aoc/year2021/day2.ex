@@ -24,7 +24,7 @@ defmodule AOC.Year2021.Day2 do
   end
 
   def update_position(["forward", amt], {x, y, aim}) do
-    {x + amt, y + (aim * amt), aim}
+    {x + amt, y + aim * amt, aim}
   end
 
   def update_position(["up", amt], {x, y, aim}) do
