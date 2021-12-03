@@ -19,10 +19,7 @@ defmodule AOC.Year2021.Day1 do
 
   def part2(_, count), do: count
 
-  def parse_input() do
-    input()
-    |> String.trim()
-    |> String.split("\n")
-    |> Enum.map(&String.to_integer/1)
+  def parse_input(list \\ input()) do
+    Enum.map(list, &String.to_integer/1)
   end
 end

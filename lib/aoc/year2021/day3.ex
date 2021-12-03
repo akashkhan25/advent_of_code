@@ -21,7 +21,6 @@ defmodule AOC.Year2021.Day3 do
 
   def parse_input(list \\ input()) do
     list
-    |> String.split("\n", trim: true)
     |> Enum.map(&String.graphemes/1)
   end
 

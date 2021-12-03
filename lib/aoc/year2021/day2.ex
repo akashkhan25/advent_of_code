@@ -35,10 +35,8 @@ defmodule AOC.Year2021.Day2 do
     {x, y, aim + amt}
   end
 
-  def parse_input() do
-    input()
-    |> String.trim()
-    |> String.split("\n")
+  def parse_input(list \\ input()) do
+    list
     |> Enum.map(&String.split/1)
     |> Enum.map(fn [dir, x] -> [dir, String.to_integer(x)] end)
   end
