@@ -13,7 +13,7 @@ defmodule AOC.Year2021.Day6 do
     |> simulate(256)
   end
 
-  def simulate(list, 0), do: Enum.reduce(list, 0, fn {_k, v}, acc -> acc + v end)
+  def simulate(list, 0), do: list |> Map.values() |> Enum.sum()
 
   def simulate(list, days) do
     next =
