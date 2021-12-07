@@ -20,7 +20,7 @@ defmodule AOC.Year2021.Day6 do
       list
       |> Enum.map(&next_counter/1)
       |> List.flatten()
-      |> Enum.reduce(%{}, fn {k, v}, acc -> Map.update(acc, k, v, fn val -> val + v end) end)
+      |> Enum.reduce(%{}, fn {k, v}, acc -> Map.update(acc, k, v, &(&1 + v)) end)
 
     simulate(next, days - 1)
   end
