@@ -45,18 +45,16 @@ defmodule AOC.Year2021.Day8 do
       |> guess_six()
       |> guess_nine()
 
-    {zero, two} = Enum.split_with(zero_two, &(MapSet.size(&1) == 6))
+    {[zero], [two]} = Enum.split_with(zero_two, &(MapSet.size(&1) == 6))
 
-    # TODO: fix this
     mapping =
-      [{"0", zero}, {"2", two} | results]
-      |> Enum.reduce(%{}, fn {v, k}, acc -> Map.put(acc, k, v) end)
+      [{zero, "0"}, {two, "2"} | results] |> Enum.into(%{})
 
     calculate_output(mapping, guessed_output)
   end
 
   def guess_three({unknowns, knowns}) do
-    {_, seven} = find_val(knowns, "7")
+    {seven, _} = find_val(knowns, "7")
 
     check_fn = fn x, check_val ->
       MapSet.intersection(x, check_val) == check_val
@@ -64,11 +62,11 @@ defmodule AOC.Year2021.Day8 do
 
     three = find_by_length_and_cond(unknowns, 5, seven, check_fn)
     unknowns = remove_val(unknowns, three)
-    {unknowns, [{"3", three} | knowns]}
+    {unknowns, [{three, "3"} | knowns]}
   end
 
   def guess_five({unknowns, knowns}) do
-    {_, four} = find_val(knowns, "4")
+    {four, _} = find_val(knowns, "4")
 
     check_fn = fn x, check_val ->
       MapSet.intersection(check_val, x) |> MapSet.size() == 3
@@ -76,11 +74,11 @@ defmodule AOC.Year2021.Day8 do
 
     five = find_by_length_and_cond(unknowns, 5, four, check_fn)
     unknowns = remove_val(unknowns, five)
-    {unknowns, [{"5", five} | knowns]}
+    {unknowns, [{five, "5"} | knowns]}
   end
 
   def guess_six({unknowns, knowns}) do
-    {_, one} = find_val(knowns, "1")
+    {one, _} = find_val(knowns, "1")
 
     check_fn = fn x, check_val ->
       x
@@ -90,11 +88,11 @@ defmodule AOC.Year2021.Day8 do
 
     six = find_by_length_and_cond(unknowns, 6, one, check_fn)
     unknowns = remove_val(unknowns, six)
-    {unknowns, [{"6", six} | knowns]}
+    {unknowns, [{six, "6"} | knowns]}
   end
 
   def guess_nine({unknowns, knowns}) do
-    {_, four} = find_val(knowns, "4")
+    {four, _} = find_val(knowns, "4")
 
     check_fn = fn x, check_val ->
       MapSet.intersection(x, check_val) == check_val
@@ -102,20 +100,20 @@ defmodule AOC.Year2021.Day8 do
 
     nine = find_by_length_and_cond(unknowns, 6, four, check_fn)
     unknowns = remove_val(unknowns, nine)
-    {unknowns, [{"9", nine} | knowns]}
+    {unknowns, [{nine, "9"} | knowns]}
   end
 
-  def guess(word) when length(word) == 2, do: {"1", set(word)}
-  def guess(word) when length(word) == 4, do: {"4", set(word)}
-  def guess(word) when length(word) == 3, do: {"7", set(word)}
-  def guess(word) when length(word) == 7, do: {"8", set(word)}
+  def guess(word) when length(word) == 2, do: {set(word), "1"}
+  def guess(word) when length(word) == 4, do: {set(word), "4"}
+  def guess(word) when length(word) == 3, do: {set(word), "7"}
+  def guess(word) when length(word) == 7, do: {set(word), "8"}
   def guess(word), do: set(word)
 
   def set(word), do: MapSet.new(word)
 
   def find_val(list, val) do
     Enum.find(list, fn
-      {^val, _} -> true
+      {_, ^val} -> true
       _ -> false
     end)
   end
@@ -134,7 +132,7 @@ defmodule AOC.Year2021.Day8 do
   def calculate_output(mapping, outputs) do
     outputs
     |> Enum.map(fn
-      {val, _} -> val
+      {_, val} -> val
       k -> Map.get(mapping, k)
     end)
     |> Enum.join()
