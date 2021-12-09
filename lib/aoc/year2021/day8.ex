@@ -47,8 +47,7 @@ defmodule AOC.Year2021.Day8 do
 
     {[zero], [two]} = Enum.split_with(zero_two, &(MapSet.size(&1) == 6))
 
-    mapping =
-      [{zero, "0"}, {two, "2"} | results] |> Enum.into(%{})
+    mapping = [{zero, "0"}, {two, "2"} | results] |> Enum.into(%{})
 
     calculate_output(mapping, guessed_output)
   end
@@ -69,7 +68,9 @@ defmodule AOC.Year2021.Day8 do
     {four, _} = find_val(knowns, "4")
 
     check_fn = fn x, check_val ->
-      MapSet.intersection(check_val, x) |> MapSet.size() == 3
+      check_val
+      |> MapSet.intersection(x)
+      |> MapSet.size() == 3
     end
 
     five = find_by_length_and_cond(unknowns, 5, four, check_fn)
