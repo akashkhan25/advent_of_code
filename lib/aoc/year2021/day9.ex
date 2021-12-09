@@ -3,7 +3,7 @@ defmodule AOC.Year2021.Day9 do
   @offsets [{1, 0}, {-1, 0}, {0, 1}, {0, -1}]
 
   def part1(list \\ input()) do
-    coords = list |> parse_input()
+    coords = parse_input(list)
 
     coords
     |> Enum.filter(&low_point?(&1, coords))
@@ -12,14 +12,13 @@ defmodule AOC.Year2021.Day9 do
   end
 
   def part2(list \\ input()) do
-    coords = list |> parse_input()
-    low_points = coords |> Enum.filter(&low_point?(&1, coords)) |> IO.inspect(label: "low_points")
+    coords = parse_input(list)
+    low_points = Enum.filter(coords, &low_point?(&1, coords))
 
     initial_basins =
       low_points
-      |> Enum.map(fn {point, _} -> {point, 1} end)
+      |> Enum.map(fn {point, _} -> {point, 0} end)
       |> Enum.into(%{})
-      |> IO.inspect(label: "initial_basins")
 
     find_basins(coords, low_points, initial_basins)
   end
@@ -30,7 +29,7 @@ defmodule AOC.Year2021.Day9 do
     low_points
     |> Enum.reduce({visited, initial_basins}, &visit_next(&1, &2, &1, coords))
     |> elem(1)
-    |> Enum.map(fn {_, v} -> v - 1 end)
+    |> Enum.map(fn {_, v} -> v end)
     |> Enum.sort(:desc)
     |> Enum.take(3)
     |> Enum.product()
@@ -39,21 +38,18 @@ defmodule AOC.Year2021.Day9 do
   def visit_next(
         {{x, y} = point, val},
         {visited, basins},
-        {current_low_point, _} = low_point,
+        {lp_coords, _} = current_lp,
         coords
       ) do
-    IO.inspect(point, label: "Visiting point")
-    visited = Map.update(visited, {x, y}, nil, fn _ -> true end)
-    basins = Map.update(basins, current_low_point, nil, &(&1 + 1))
+    visited = Map.update(visited, point, nil, fn _ -> true end)
+    basins = Map.update(basins, lp_coords, nil, &(&1 + 1))
 
     for {dx, dy} <- @offsets, reduce: {visited, basins} do
       {visited, basins} ->
-        next_point = {x + dx, y + dy} |> IO.inspect(label: "next_point")
-        IO.inspect(val, label: "val")
-        coords[next_point] |> IO.inspect(label: "next_val")
+        next_point = {x + dx, y + dy}
 
         if still_in_basin?(val, next_point, visited, coords) do
-          visit_next({next_point, coords[next_point]}, {visited, basins}, low_point, coords)
+          visit_next({next_point, coords[next_point]}, {visited, basins}, current_lp, coords)
         else
           {visited, basins}
         end
@@ -65,10 +61,6 @@ defmodule AOC.Year2021.Day9 do
   end
 
   def still_in_basin?(val, next_point, visited, coords) do
-    visited[next_point] |> IO.inspect(label: "visited")
-    IO.inspect(!visited[next_point], label: "cond1")
-    IO.inspect(!(coords[next_point] == 9), label: "cond2")
-    IO.inspect((coords[next_point] || -1) >= val, label: "cond3")
     !visited[next_point] && !(coords[next_point] == 9) && (coords[next_point] || -1) >= val
   end
 
