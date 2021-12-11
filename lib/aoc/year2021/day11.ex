@@ -10,7 +10,7 @@ defmodule AOC.Year2021.Day11 do
       {flashes, new_state} = step(state)
       {flash_count + flashes, new_state}
     end)
-    |> tap(fn {_, state} -> print_coords(state) end)
+    |> tap(fn {_, state} -> print_state(state) end)
     |> elem(0)
   end
 
@@ -77,7 +77,7 @@ defmodule AOC.Year2021.Day11 do
   def parse_input(list \\ input()) do
     list
     |> Enum.map(&parse_line/1)
-    |> build_coords_map()
+    |> build_state_map()
   end
 
   def parse_line(line) do
@@ -86,7 +86,7 @@ defmodule AOC.Year2021.Day11 do
     |> Enum.map(&String.to_integer/1)
   end
 
-  def build_coords_map(list) do
+  def build_state_map(list) do
     list
     |> Enum.with_index()
     |> Enum.reduce(%{}, fn {list, y}, acc ->
@@ -96,11 +96,11 @@ defmodule AOC.Year2021.Day11 do
     end)
   end
 
-  def print_coords(coords) do
+  def print_state(state) do
     for y <- 0..@grid_size, x <- 0..@grid_size, reduce: [] do
       str ->
         str = if x == 0, do: ["\n" | str], else: str
-        {energy, _} = Map.fetch!(coords, {x, y})
+        {energy, _} = Map.fetch!(state, {x, y})
         [to_string(energy) | str]
     end
     |> Enum.reverse()
