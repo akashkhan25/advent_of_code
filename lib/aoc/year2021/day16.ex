@@ -16,6 +16,7 @@ defmodule AOC.Year2021.Day16 do
   end
 
   def literal(<<0::1, x::size(4), r::bitstring>>, acc, v), do: {r, acc * 16 + x, v}
+
   def literal(<<1::1, x::size(4), r::bitstring>>, acc, v), do: literal(r, acc * 16 + x, v)
 
   def pkts(<<>>, l, s, c), do: {c, l, s}
