@@ -9,14 +9,14 @@ defmodule AOC.Year2021.Day18 do
   end
 
   def part2(list \\ input()) do
-     input = parse_input(list)
+    input = parse_input(list)
 
-     for list1 <- input, list2 <- input, list1 != list2 do
-        list1
-        |> add(list2)
-        |> magnitude()
-     end
-     |> Enum.max()
+    for list1 <- input, list2 <- input, list1 != list2 do
+      list1
+      |> add(list2)
+      |> magnitude()
+    end
+    |> Enum.max()
   end
 
   def add(list, acc) do

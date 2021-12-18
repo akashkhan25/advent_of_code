@@ -69,8 +69,10 @@ defmodule AOC.Year2021.Day15 do
   end
 
   def parse_input(list \\ input()) do
-    for {line, y} <- Enum.with_index(list), {val, x} <- Enum.with_index(String.to_charlist(line)), into: %{} do
-      {{x,y}, val - ?0}
+    for {line, y} <- Enum.with_index(list),
+        {val, x} <- Enum.with_index(String.to_charlist(line)),
+        into: %{} do
+      {{x, y}, val - ?0}
     end
   end
 end

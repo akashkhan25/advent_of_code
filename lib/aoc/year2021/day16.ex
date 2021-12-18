@@ -36,9 +36,11 @@ defmodule AOC.Year2021.Day16 do
   def eval({r, [b, a], v}, 7), do: {r, if(a == b, do: 1, else: 0), v}
 
   def packet(<<v::size(3), t::size(3), r::bitstring>>) when t == 4, do: literal(r, 0, v)
+
   def packet(<<v::size(3), t::size(3), 1::1, len::size(11), r::bitstring>>) do
     eval(pktl(r, [], len, v), t)
   end
+
   def packet(<<v::size(3), t::size(3), 0::1, len::size(15), sp::size(len), rr::bitstring>>) do
     eval(pkts(<<sp::size(len)>>, [], v, rr), t)
   end
@@ -49,6 +51,7 @@ defmodule AOC.Year2021.Day16 do
   end
 
   def hex2bin(<<>>), do: <<>>
+
   def hex2bin(<<a::size(8), b::size(8), rest::binary>>) do
     <<a, b>>
     |> Integer.parse(16)
