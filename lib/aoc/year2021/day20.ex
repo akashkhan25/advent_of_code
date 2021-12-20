@@ -11,12 +11,11 @@ defmodule AOC.Year2021.Day20 do
   end
 
   def part2(list \\ :input) do
-  {algo, image} = parse_input(list)
+    {algo, image} = parse_input(list)
 
     0..49
     |> Enum.reduce(image, &enhance(&1, &2, algo))
     |> Enum.count(fn {_, v} -> v == 1 end)
-
   end
 
   def enhance(step, image, algo) do
@@ -83,8 +82,8 @@ defmodule AOC.Year2021.Day20 do
   def print_image(image) do
     {{min_x, min_y}, {max_x, max_y}} = bounding_box(image)
 
-    for y <- min_y-3..max_y+3 do
-      for x <- min_x-3..max_x + 3 do
+    for y <- (min_y - 3)..(max_y + 3) do
+      for x <- (min_x - 3)..(max_x + 3) do
         if image[{x, y}] == 1, do: "#", else: "."
       end
       |> IO.puts()
