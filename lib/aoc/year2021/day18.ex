@@ -76,15 +76,11 @@ defmodule AOC.Year2021.Day18 do
   def merge(val, [v1, v2]), do: [merge(val, v1), v2]
   def merge(v1, v2), do: v1 + v2
 
-  def magnitude(v1) when not is_list(v1), do: v1
-
   def magnitude([v1, v2]) do
     3 * magnitude(v1) + 2 * magnitude(v2)
   end
 
-  def magnitude([head | tail]) do
-    magnitude(head) + magnitude(tail)
-  end
+  def magnitude(v1), do: v1
 
   def parse_input(list \\ input()) do
     list
