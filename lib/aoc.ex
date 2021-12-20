@@ -3,14 +3,26 @@ defmodule AOC do
     quote do
       @input_dir "#{__DIR__}/inputs"
       def input() do
-        filename = "#{unquote(day)}.txt"
-        read_file(filename)
+        :input
+        |> input_filename()
+        |> read_file()
       end
 
       def sample_input() do
-        filename = "sample_#{unquote(day)}.txt"
-        read_file(filename)
+        :sample
+        |> input_filename()
+        |> read_file()
       end
+
+      def raw_input(name) do
+        name
+        |> input_filename()
+        |> then(fn filename -> Path.join(@input_dir, filename) end)
+        |> File.read!()
+      end
+
+      def input_filename(:sample), do: "sample_#{unquote(day)}.txt"
+      def input_filename(:input), do: "#{unquote(day)}.txt"
 
       defp read_file(filename) do
         @input_dir
