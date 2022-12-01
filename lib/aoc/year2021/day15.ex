@@ -33,7 +33,6 @@ defmodule AOC.Year2021.Day15 do
     |> Enum.take(1)
     |> List.first()
     |> elem(1)
-    |> IO.inspect()
   end
 
   def solve2(grid) do
