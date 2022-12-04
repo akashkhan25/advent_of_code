@@ -4,15 +4,13 @@ defmodule AOC.Year2022.Day4 do
   def part1(list \\ input()) do
     list
     |> parse_input()
-    |> Enum.filter(&contains?/1)
-    |> Enum.count()
+    |> Enum.count(&contains?/1)
   end
 
   def part2(list \\ input()) do
     list
     |> parse_input()
-    |> Enum.filter(&overlaps?/1)
-    |> Enum.count()
+    |> Enum.count(&overlaps?/1)
   end
 
 
