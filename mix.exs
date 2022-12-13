@@ -22,7 +22,7 @@ defmodule AOC.MixProject do
   defp deps do
     [
       {:benchee, "~> 1.0"},
-      {:priority_queue, "~> 1.0"},
+      {:libgraph, "~> 0.16"},
       {:nx, github: "elixir-nx/nx", sparse: "nx"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
