@@ -33,71 +33,49 @@ defmodule AOC.Year2022.Day21 do
   end
 
   def try_evaluate({:=, [arg1, arg2]}, _, map) do
-    arg2_ast = dfs(map, arg2)
-    arg2_expr = Macro.to_string(arg2_ast)
-
-    if String.contains?(arg2_expr, @key) do
-      map
-      |> dfs(arg1)
-      |> eval()
-    else
-      eval(arg2_ast)
-    end
+    {_, val} = find_eval_arg(arg1, arg2, map)
+    val
   end
 
   def try_evaluate({:div, [arg1, arg2]}, current_ast, map) do
-    arg2_ast = dfs(map, arg2)
-    arg2_expr = Macro.to_string(arg2_ast)
-
-    if String.contains?(arg2_expr, @key) do
-      arg1_ast = dfs(map, arg1)
-      arg1_val = eval(arg1_ast)
-      {:div, [], [current_ast, arg1_val]}
-    else
-      arg2_val = eval(arg2_ast)
-      {:*, [], [arg2_val, current_ast]}
+    case find_eval_arg(arg1, arg2, map) do
+      {:first, val} -> {:div, [], [val, current_ast]}
+      {:second, val} -> {:*, [], [val, current_ast]}
     end
   end
 
   def try_evaluate({:*, [arg1, arg2]}, current_ast, map) do
-    arg2_ast = dfs(map, arg2)
-    arg2_expr = Macro.to_string(arg2_ast)
-
-    if String.contains?(arg2_expr, @key) do
-      arg1_ast = dfs(map, arg1)
-      arg1_val = eval(arg1_ast)
-      {:div, [], [current_ast, arg1_val]}
-    else
-      arg2_val = eval(arg2_ast)
-      {:div, [], [current_ast, arg2_val]}
+    case find_eval_arg(arg1, arg2, map) do
+      {:first, val} -> {:div, [], [current_ast, val]}
+      {:second, val} -> {:div, [], [current_ast, val]}
     end
   end
 
   def try_evaluate({:+, [arg1, arg2]}, current_ast, map) do
-    arg2_ast = dfs(map, arg2)
-    arg2_expr = Macro.to_string(arg2_ast)
-
-    if String.contains?(arg2_expr, @key) do
-      arg1_ast = dfs(map, arg1)
-      arg1_val = eval(arg1_ast)
-      {:-, [], [current_ast, arg1_val]}
-    else
-      arg2_val = eval(arg2_ast)
-      {:-, [], [current_ast, arg2_val]}
+    case find_eval_arg(arg1, arg2, map) do
+      {:first, val} -> {:-, [], [current_ast, val]}
+      {:second, val} -> {:-, [], [current_ast, val]}
     end
   end
 
   def try_evaluate({:-, [arg1, arg2]}, current_ast, map) do
+    case find_eval_arg(arg1, arg2, map) do
+      {:first, val} -> {:-, [], [val, current_ast]}
+      {:second, val} -> {:+, [], [current_ast, val]}
+    end
+  end
+
+  def find_eval_arg(arg1, arg2, map) do
     arg2_ast = dfs(map, arg2)
     arg2_expr = Macro.to_string(arg2_ast)
 
     if String.contains?(arg2_expr, @key) do
       arg1_ast = dfs(map, arg1)
       arg1_val = eval(arg1_ast)
-      {:-, [], [arg1_val, current_ast]}
+      {:first, arg1_val}
     else
       arg2_val = eval(arg2_ast)
-      {:+, [], [current_ast, arg2_val]}
+      {:second, arg2_val}
     end
   end
 
@@ -138,15 +116,6 @@ defmodule AOC.Year2022.Day21 do
     m1_val = dfs(map, m1)
     m2_val = dfs(map, m2)
     {op, [], [m1_val, m2_val]}
-  end
-
-  def try_evaluate_ast(ast) do
-    try do
-      Code.eval_quoted(ast)
-    rescue
-      ArithmeticError ->
-        {:error, ast}
-    end
   end
 
   def parse_input(list \\ input()) do
