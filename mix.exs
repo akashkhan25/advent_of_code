@@ -5,7 +5,7 @@ defmodule AOC.MixProject do
     [
       app: :aoc,
       version: "0.1.0",
-      elixir: "~> 1.15.0",
+      elixir: "~> 1.18.0-dev",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -23,7 +23,8 @@ defmodule AOC.MixProject do
     [
       {:benchee, "~> 1.0"},
       {:libgraph, "~> 0.16"},
-      {:nx, github: "elixir-nx/nx", sparse: "nx"}
+      {:nx, github: "elixir-nx/nx", sparse: "nx"},
+      {:nimble_parsec, "~> 1.4"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
